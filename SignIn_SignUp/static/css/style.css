@@ -1,0 +1,42 @@
+a {
+    position: relative;
+    left: 265px;
+    top: 10px;
+}
+
+.jumbotron{
+    position: relative;
+    left:180px;
+    top: 60px;
+    background-color: #f5e79e;
+}
+
+p {
+    text-align: center;  
+}
+
+#view{
+	position: relative;
+	top: 50px;
+	padding-bottom: 25px;
+}
+
+hr{
+    position: relative;
+    top: 45px;
+    left: 180px;
+    border-top: 2px solid black;
+}
+
+#fila{
+    position: relative;
+    margin-left:400px;
+    margin-top: 30px;
+
+}
+
+#guardar{
+    position: relative;
+    margin-top: 20px;
+    margin-left: 150px;
+}
