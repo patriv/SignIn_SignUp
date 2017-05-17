@@ -1,12 +1,5 @@
 $(document).ready(function () {
 
-        $("#id_first_name").click(function () {
-            if (name.length === 0) {
-               alert("El nombre no puede estar vacío");
-               errorName.innerHTML = message1;
-           }
-        });
-
        $("#id_first_name").change(function () {
            alert("funcion");
            var name = $(this).val();
@@ -16,11 +9,11 @@ $(document).ready(function () {
            var vacio = "";
            alert(name);
            if ( !(name.match(regex))){
-               errorName.innerHTML = message1;
+               $("#error").innerText = message1;
            }
            if (name.length === 0) {
                alert("El nombre no puede estar vacío");
-               errorName.innerHTML = message1;
+               $("#error").innerText = message1;
            }
        })
     });
