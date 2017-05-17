@@ -1,5 +1,4 @@
 from django.conf.urls import url
-
 from login.views import *
 
 urlpatterns = {
@@ -17,10 +16,10 @@ urlpatterns = {
         name='login'),
     url(
         r'^sucessRegister',
-        Login.as_view(),
+        Success.as_view(),
         name='success_register'),
     url(
         r'^welcome',
-        Login.as_view(),
+        Welcome.as_view(),
         name='welcome'),
 }

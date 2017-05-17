@@ -67,5 +67,11 @@ class Login (FormView):
         else:
             return render(request, 'login.html', {'form': form})
 
+class Success (TemplateView):
+    template_name = 'success.html'
+
+class Welcome (TemplateView):
+    template_name = 'welcome.html'
+
 
 
