@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title> Nombre de la Aplicación </title>
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-theme.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -16,9 +16,11 @@
 <body>
 <div class="container">
     {% block content %}
-        <a href = "#"> <button>Login</button></a>
-        <a href = "#"> <button>Registro</button></a>
+        <a href = "{% url 'login' %}"> <button>Login</button></a>
+        <a href = "{% url 'registro' %}"> <button>Registro</button></a>
     {% endblock %}
 </div>
+    {% block button %}
+    {% endblock %}
 </body>
 </html>
