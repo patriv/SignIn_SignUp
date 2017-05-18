@@ -7,12 +7,12 @@ from django import forms
 class RegisterForm(forms.ModelForm):
 
     password2 = forms.CharField(
-        label="Repita la Contraseña",
+        label="Repita la Contraseña: ",
         widget=forms.PasswordInput()
     )
 
     password = forms.CharField(
-        label="Contraseña",
+        label="Contraseña: ",
         widget=forms.PasswordInput()
     )
 
@@ -44,11 +44,15 @@ class RegisterForm(forms.ModelForm):
 
 class LoginForm(forms.ModelForm):
 
+    password = forms.CharField(
+        label="Contraseña: ",
+        widget=forms.PasswordInput()
+    )
+
     class Meta:
         model = User
-        fields = ['username','password']
+        fields = ['username']
 
         labels = {
-            'username': 'Username: ',
-            'password': 'Contraseña: '
+            'username': 'Username: '
         }

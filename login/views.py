@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import *
 from django.contrib.auth import *
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from login.forms import *
 
 
@@ -43,7 +44,7 @@ class Registro (FormView):
             return render(request,'register.html',{'form': form})
 
 
-class Login (FormView):
+class Login (CreateView):
     template_name = 'login.html'
     form_class = LoginForm
 
@@ -69,11 +70,12 @@ class Login (FormView):
         else:
             return render(request, 'login.html', {'form': form})
 
+
 class Success (TemplateView):
     template_name = 'success.html'
 
-class Welcome (TemplateView):
+
+class Welcome (LoginRequiredMixin, TemplateView):
     template_name = 'welcome.html'
-
-
-
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
