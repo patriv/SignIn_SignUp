@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
