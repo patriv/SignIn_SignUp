@@ -27,6 +27,18 @@ class RegisterForm(forms.ModelForm):
             'username': 'Username: ',
         }
 
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+
+        ##placeholder
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Sólo se admiten letras'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Sólo se admiten letras'
+        self.fields['password'].widget.attrs['placeholder'] = 'Sólo caracteres alfanuméricos'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Sólo caracteres alfanuméricos'
+        self.fields['username'].widget.attrs['placeholder'] = 'Sólo caracteres numéricos'
+
+        self.fields['email'].widget.attrs['placeholder'] = 'Ej: nombre@example.com'
+
 
 
 

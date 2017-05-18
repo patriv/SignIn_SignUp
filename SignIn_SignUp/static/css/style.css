@@ -1,42 +1,20 @@
-a {
+button {
+    margin: 30px;
     position: relative;
-    left: 265px;
-    top: 10px;
+    margin-left: 200px;
+    padding: 10px 20px;
 }
 
-.jumbotron{
+input {
+    display: block;
+    padding: 5px;
+    width: 250px;
+    align-items: center;
+    margin: 5px;
     position: relative;
-    left:180px;
-    top: 60px;
-    background-color: #f5e79e;
+    margin-left: 20px;
 }
 
-p {
-    text-align: center;  
-}
-
-#view{
-	position: relative;
-	top: 50px;
-	padding-bottom: 25px;
-}
-
-hr{
-    position: relative;
-    top: 45px;
-    left: 180px;
-    border-top: 2px solid black;
-}
-
-#fila{
-    position: relative;
-    margin-left:400px;
-    margin-top: 30px;
-
-}
-
-#guardar{
-    position: relative;
-    margin-top: 20px;
-    margin-left: 150px;
+label {
+    margin: 5px;
 }
