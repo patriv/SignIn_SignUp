@@ -23,6 +23,10 @@ urlpatterns = [
         Registro.as_view(),
         name='registro'),
     url(
+        r'^activate/(?P<activation_key>\w+)/$',
+        register_confirm,
+        name='register_confirm'),
+    url(
         r'^sucessRegister',
         Success.as_view(),
         name='success_register'),

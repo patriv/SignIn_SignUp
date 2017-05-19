@@ -39,23 +39,8 @@ class RegisterForm(forms.ModelForm):
         self.fields['email'].widget.attrs['placeholder'] = 'Ej: nombre@example.com'
 
 
-# class LoginForm(forms.ModelForm):
-
-#     password = forms.CharField(
-#         label="Contraseña: ",
-#         widget=forms.PasswordInput()
-#     )
-
-#     class Meta:
-#         model = User
-#         fields = ['username']
-
-#         labels = {
-#             'username': 'Username: '
-#         }
-
-
 class LoginForm(forms.Form):
+
     username = forms.CharField(
         max_length=60, label=' Username o Email: ',
         required=True, widget=forms.TextInput())

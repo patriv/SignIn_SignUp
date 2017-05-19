@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+    {% block content %}
+        <div>
+            <h2> Registro Exitoso! </h2>
+            <p>Hola <b>{{usuario}}</b>, ¡Gracias por unirte a nuestra Aplicación! </p>
+
+            <label> Su código de validación es: </label>
+            <h4 style="margin-left: 130px"> {{ key }} </h4>
+
+            <p>
+              El enlace estará activo por 24hrs, luego tu cuenta será cancelada.
+            </p>
+        </div>
+    {% endblock %}
+
+    {% block button %}
+
+    {% endblock %}
+
+
+

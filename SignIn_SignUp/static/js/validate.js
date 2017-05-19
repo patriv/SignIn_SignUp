@@ -58,8 +58,8 @@ $(document).ready(function () {
        
        var password = $(this).val();
        var message1 = "La contraseña debe ser mayor de seis dígitos, alfanumérica, con mínimo una letra mayúscula y " +
-                        "contener alguno de estos caracteres especiales: $@!%_*?&";
-       var regexPassword =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%_*?&])([A-Za-z\d$@$!%*_?&]|[^ ]){6,10}$/;
+                        "contener alguno de estos caracteres especiales: $@!%_*?&.";
+       var regexPassword =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%_*?&.])([A-Za-z\d$@$!%*_?&.]|[^ ]){6,10}$/;
        if (!(password.match(regexPassword))) {
             error_password.innerHTML = message1;
        }

@@ -3,13 +3,22 @@
     {% block content %}
         <div>
             <h2> Registro Exitoso! </h2>
-            <p> <blockquote> Ya puede ingresar con su username y password </blockquote> </p>
+            <p>Hola <b>{{usuario}}</b>, ¡Gracias por unirte a nuestra Aplicación! </p>
+            <label> Ingresa el código de validación enviado a tu correo: </label>
+            <input type="text" id="cod_validacion" required>
+
+            <div>
+                <h4>
+                    El código estará activo por 24hrs, luego tu cuenta será cancelada.
+                </h4>
+            </div>
+
         </div>
     {% endblock %}
 
     {% block button %}
 
-        <a href="{% url 'home' %}"><button> Volver a la Página Principal </button</a>
+        <a href="{% url 'welcome' %}"><button> Activar </button></a>
 
     {% endblock %}
 
