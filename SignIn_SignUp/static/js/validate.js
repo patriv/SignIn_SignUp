@@ -22,17 +22,46 @@ $(document).ready(function () {
        if ( !(lastname.match(regexLastname))){
            error_lastname.innerHTML = message1;
        }
-       else if (lastname.length == 0) {
-           error_lastname.innerHTML = message1;
-       }
+
     });
 
     $("#id_email").change(function () {
        var email = $(this).val();
        var message1 = "Introduzca un correo electrónico válido";
        var regexEmail =  /^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
+       var form = $(this).closest("form");
+
        if ( !(email.match(regexEmail))){
            error_email.innerHTML = message1;
+       }
+       else {
+           $.ajax({
+               url: form.attr("data-validate-email-url"),
+               data: {
+                   email: email
+               },
+               type: 'POST',
+               dataType: 'json',
+               success: function (data) {
+                   if (data.email_exists) {
+                       error_email.innerHTML = data.error;
+                   }
+               }
+           });
+           $.ajax({
+               url: form.attr("data-forgot-email-url"),
+               data: {
+                   email: email
+               },
+               type: 'POST',
+               dataType: 'json',
+               success: function (data) {
+                   emailExist = data.email_exists;
+                   if ((emailExist) == false) {
+                       error_email.innerHTML = data.error;
+                   }
+               }
+           })
        }
 
     });
@@ -57,9 +86,11 @@ $(document).ready(function () {
     $("#id_password").change(function () {
        
        var password = $(this).val();
-       var message1 = "La contraseña debe ser mayor de seis dígitos, alfanumérica, con mínimo una letra mayúscula y " +
-                        "contener alguno de estos caracteres especiales: $@!%_*?&.";
-       var regexPassword =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%_*?&.])([A-Za-z\d$@$!%*_?&.]|[^ ]){6,10}$/;
+       alert(password);
+       var message1 = "La contraseña debe tener una longitud entre seis y diez caracteres, alfanumérica, con mínimo una letra " +
+                      "mayúscula y contener alguno de estos caracteres especiales: $@!%_*?&.";
+       var regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$@!%_*?&.]).{6,10}$/;
+
        if (!(password.match(regexPassword))) {
             error_password.innerHTML = message1;
        }

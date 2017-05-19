@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block content %}
-    <form action="" method="POST" id='form_id' data-validate-username-url="{% url 'validate_username' %}">
+    <form action="" method="POST" id='form_id' data-validate-username-url="{% url 'validate_username' %}"
+                    data-validate-email-url = "{% url 'validate_email' %}">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-3">
@@ -16,44 +17,44 @@
             <div class="col-md-6">
                 <div>
 
-                 <div>
-                 <label>Nombre: </label>
-                 <span>{{form.first_name}}</span>
-                 <div id = "error_name"></div>
-                 </div>
+                     <div>
+                     <label>Nombre: </label>
+                     <span>{{form.first_name}}</span>
+                     <div id = "error_name"></div>
+                     </div>
 
-                 <div>
-                 <label>Apellido: </label>
-                 <span>{{form.last_name}}</span>
-                 <div id = "error_lastname"></div>
-                 </div>
+                     <div>
+                     <label>Apellido: </label>
+                     <span>{{form.last_name}}</span>
+                     <div id = "error_lastname"></div>
+                     </div>
 
-                 <div>
-                 <label>Email: </label>
-                 <span>{{form.email}}</span>
-                 <div id = "error_email"></div>
-                 </div>
+                     <div>
+                     <label>Email: </label>
+                     <span>{{form.email}}</span>
+                     <div id = "error_email"></div>
+                     </div>
 
-                 <div>
-                 <label>Username: </label>
-                 <span>{{form.username}}</span>
-                 <div id = "error_username"></div>
-                 </div>
+                     <div>
+                     <label>Username: </label>
+                     <span>{{form.username}}</span>
+                     <div id = "error_username"></div>
+                     </div>
 
-                 <div>
-                 <label>Contraseña: </label>
-                 <span>{{form.password}}</span>
-                 <div id = "error_password"></div>
-                 </div>
+                     <div>
+                     <label>Contraseña: </label>
+                     <span>{{form.password}}</span>
+                     <div id = "error_password"></div>
+                     </div>
 
+                     <label>Por favor, repita la contraseña: </label>
+                     <span>{{form.password2}}</span>
+                     <div id = "error_password2"></div>
 
-                 <label>Por favor, repita la contraseña: </label>
-                 <span>{{form.password2}}</span>
-                 <div id = "error_password2"></div>
-
-                <button type="submit" name="button">Registrar</button>
+                    <button type="submit" name="button">Login</button>
             </div>
             <div class="col-md-3">
+            </div>
             </div>
         </div>
     </form >

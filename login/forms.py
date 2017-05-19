@@ -39,12 +39,17 @@ class RegisterForm(forms.ModelForm):
         self.fields['email'].widget.attrs['placeholder'] = 'Ej: nombre@example.com'
 
 
-class LoginForm(forms.Form):
 
+class LoginForm(forms.Form):
     username = forms.CharField(
         max_length=60, label=' Username o Email: ',
         required=True, widget=forms.TextInput())
     password = forms.CharField(
         label="Contraseña: ", required=True, widget=forms.PasswordInput())
 
-
+class forgotUsernameForm(forms.Form):
+    email = forms.CharField(
+        label = 'Email: ',
+        required= True,
+        widget= forms.EmailInput()
+    )

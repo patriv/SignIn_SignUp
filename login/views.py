@@ -20,11 +20,37 @@ def validate_username(request):
     data = {
         'username_exists':User.objects.filter(username=username).exists()
     }
-    
+
     if data['username_exists']:
         data['error'] = 'El username escogido no está disponible.'
 
     return JsonResponse(data)
+
+
+def validate_email(request):
+    email = request.POST.get('email', None)
+    data = {
+        'email_exists': User.objects.filter(email=email).exists()
+    }
+
+    if data['email_exists']:
+        data['error'] = 'El email ingresado ya está registrado, por favor intente nuevamente'
+
+    return JsonResponse(data)
+
+def forgot_email(request):
+    email = request.POST.get('email', None)
+    print(email)
+    data = {
+        'email_exists': User.objects.filter(email=email).exists()
+    }
+
+    if data['email_exists'] == False:
+        print("en if")
+        data['error'] = 'El email ingresado no existe, por favor intente nuevamente'
+
+    return JsonResponse(data)
+
 
 
 def groups():
@@ -131,7 +157,7 @@ class Registro (FormView):
         context = super(
             Registro, self).get_context_data(**kwargs)
         return context
- 
+
 
     def post(self, request, *args, **kwargs):
         """
@@ -185,3 +211,23 @@ class Welcome (LoginRequiredMixin, TemplateView):
     template_name = 'welcome.html'
     login_url = 'login'
     redirect_field_name = 'redirect_to'
+
+class ForgotUsername (FormView):
+    template_name = 'forgotUsername.html'
+    form_class = forgotUsernameForm
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance with the passed
+        POST variables and then checked for validity.
+        """
+        post_values = request.POST.copy()
+        form = forgotUsernameForm(post_values)
+        if form.is_valid():
+            # Guardamos los datos
+
+            return HttpResponseRedirect(reverse_lazy('home'))
+        else:
+            return render(request,'forgotUsername.html',{'form': form})
+
+
