@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <form action="" method="POST" id = 'form_id'>
+    <form action="" method="POST" id='form_id' data-validate-username-url="{% url 'validate_username' %}">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-3">
@@ -37,7 +37,7 @@
                  <div>
                  <label>Username: </label>
                  <span>{{form.username}}</span>
-                 <div id = "error_email"></div>
+                 <div id = "error_username"></div>
                  </div>
 
                  <div>
@@ -47,8 +47,7 @@
                  </div>
 
 
-                 <label>Por favor,
-                 <br>repita la contraseña: </label>
+                 <label>Por favor, repita la contraseña: </label>
                  <span>{{form.password2}}</span>
                  <div id = "error_password2"></div>
 

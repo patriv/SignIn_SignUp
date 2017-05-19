@@ -18,14 +18,15 @@
                 </div>
             {% endfor %}
         {% endif %}
+
         <div class="row">
             <div class="col-md-3">
             </div>
             <div class="col-md-6">
                 {% for field in form %}
                 <div>
-                    <label> {{ field.label }}</label>
-                    <span>{{ field }}</span>
+                    <label> {{ field.label }} </label>
+                    <span> {{ field }} </span>
                 </div>
                 {% endfor %}
                 <button type="submit" name="button">Login</button>

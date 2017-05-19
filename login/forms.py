@@ -36,23 +36,30 @@ class RegisterForm(forms.ModelForm):
         self.fields['password'].widget.attrs['placeholder'] = 'Sólo caracteres alfanuméricos'
         self.fields['password2'].widget.attrs['placeholder'] = 'Sólo caracteres alfanuméricos'
         self.fields['username'].widget.attrs['placeholder'] = 'Sólo caracteres numéricos'
-
         self.fields['email'].widget.attrs['placeholder'] = 'Ej: nombre@example.com'
 
 
+# class LoginForm(forms.ModelForm):
+
+#     password = forms.CharField(
+#         label="Contraseña: ",
+#         widget=forms.PasswordInput()
+#     )
+
+#     class Meta:
+#         model = User
+#         fields = ['username']
+
+#         labels = {
+#             'username': 'Username: '
+#         }
 
 
-class LoginForm(forms.ModelForm):
-
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        max_length=60, label=' Username o Email: ',
+        required=True, widget=forms.TextInput())
     password = forms.CharField(
-        label="Contraseña: ",
-        widget=forms.PasswordInput()
-    )
+        label="Contraseña: ", required=True, widget=forms.PasswordInput())
 
-    class Meta:
-        model = User
-        fields = ['username']
 
-        labels = {
-            'username': 'Username: '
-        }

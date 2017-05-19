@@ -9,7 +9,7 @@ urlpatterns = [
         name='home'),
     url(
         r'^login',
-        Login.as_view(),
+        user_login,
         name='login'),
     url(
         r'^logout',
@@ -30,4 +30,8 @@ urlpatterns = [
         r'^welcome',
         Welcome.as_view(),
         name='welcome'),
+    url(
+        r'^ajax/validate_username/$',
+        validate_username,
+        name='validate_username'),
 ]
