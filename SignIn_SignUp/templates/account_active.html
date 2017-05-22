@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+    {% block content %}
+        <div>
+            <h2> Hola {{usuario}}! </h2>
+            <br>
+            <br>
+
+            <p> Su cuenta ha sido activada satisfactoriamente.</p>
+            <br>
+
+            <p> Ya puede empezar a disfrutar de la aplicación.</p>
+
+        </div>
+    {% endblock %}
+
+    {% block button %}
+
+        <a href="http://{{host}}/login"><button> Haga click para iniciar sesión </button></a>
+
+    {% endblock %}
+
+
+

@@ -27,6 +27,10 @@ urlpatterns = [
         register_confirm,
         name='register_confirm'),
     url(
+        r'^account-Active',
+        Active.as_view(),
+        name='account_active'),
+    url(
         r'^sucessRegister',
         Success.as_view(),
         name='success_register'),

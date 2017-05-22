@@ -38,6 +38,7 @@ def validate_email(request):
 
     return JsonResponse(data)
 
+
 def forgot_email(request):
     email = request.POST.get('email', None)
     print(email)
@@ -50,7 +51,6 @@ def forgot_email(request):
         data['error'] = 'El email ingresado no existe, por favor intente nuevamente'
 
     return JsonResponse(data)
-
 
 
 def groups():
@@ -76,6 +76,29 @@ def authenticate_user(username=None, password=None):
                 return None,0
 
 
+def email_login_successfull(user):
+    usuario = user.get_full_name()
+    last_login = user.last_login
+    date_hour = datetime.datetime.today()
+
+    formato = "%d-%m-%y %I:%m %p"
+    cadena = date_hour.strftime(formato) 
+    cadena = cadena.split(" ")
+    date = cadena[0]
+    time = cadena[1] + " " + cadena[2]
+
+
+    c = {'usuario': usuario,
+         'fecha': date,
+         'hora':time}
+    from_email = 'Aplicacion Prueba'
+    email_subject = 'Aplicación Prueba - Bienvenido a Nuestra Aplicación'
+    message = get_template('email_login.html').render(c)
+    msg = EmailMessage(email_subject, message, to=[user.email], from_email=from_email)
+    msg.content_subtype = 'html'
+    msg.send()
+
+
 def register_confirm(request, activation_key):
     if request.user.is_authenticated():
         HttpResponseRedirect(reverse_lazy('home'))
@@ -84,22 +107,33 @@ def register_confirm(request, activation_key):
                                      activation_key=activation_key)
     user = user_profile.user
 
-    # if user_profile.key_expires < timezone.now():
-    # return HttpResponseRedirect(reverse_lazy('generate_key',
-    # kwargs={'pk': user.pk}))
+    time = datetime.datetime.today()
+
+    print(user_profile.key_expires)
+    print(time)
+
+    # if user_profile.key_expires < time:
+    #     print('esta mal :(')
+        # return HttpResponseRedirect(reverse_lazy('generate_key',
+        #     kwargs={'pk': user.pk}))
+
     if request.method == 'GET':
         user.is_active = True
         user.save()
-        c = {'user': user.get_full_name,
-             'host': request.META['HTTP_HOST']}
-        from_email = 'app.prueba2113@gmail.com'
-        email_subject = 'Aplicación Prueba - Bienvenido a Nuestra Aplicación'
-        message = get_template('welcome.html').render(c)
+        c = {'usuario': user.get_full_name,
+            'host': request.META['HTTP_HOST']}
+        from_email = 'Aplicacion Prueba'
+        email_subject = 'Aplicación Prueba - Cuenta Activada'
+        message = get_template('account_active.html').render(c)
         msg = EmailMessage(email_subject, message, to=[user.email], from_email=from_email)
         msg.content_subtype = 'html'
         msg.send()
 
-    return HttpResponseRedirect(reverse_lazy('welcome'))
+    return render(request, 'account_active.html', c)
+
+
+class Active(TemplateView):
+    template_name = 'account_active.html'
 
 
 def user_login(request):
@@ -118,6 +152,7 @@ def user_login(request):
                                         password=password)
                     if user:
                         login(request, user)
+                        email_login_successfull(user)
                         return HttpResponseRedirect(reverse_lazy('welcome'))
                     else:
                         if (choices == 1) :
@@ -190,10 +225,11 @@ class Registro (FormView):
             user_profile.save()
 
             c = {'usuario': user.get_full_name,
-                 'key': activation_key}
-            from_email = 'app.prueba2113@gmail.com'
-            email_subject = 'Aplicacion Prueba - Activación de cuenta'
-            message = get_template('email_register.html').render(c)
+                 'key': activation_key,
+                 'host': request.META['HTTP_HOST']}
+            from_email = 'Aplicacion Prueba'
+            email_subject = 'Aplicación Prueba - Activación de cuenta'
+            message = get_template('success.html').render(c)
             msg = EmailMessage(email_subject, message, to=[user.email], from_email=from_email)
             msg.content_subtype = 'html'
             msg.send()

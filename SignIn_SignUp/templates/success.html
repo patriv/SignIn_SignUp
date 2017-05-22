@@ -4,12 +4,11 @@
         <div>
             <h2> Registro Exitoso! </h2>
             <p>Hola <b>{{usuario}}</b>, ¡Gracias por unirte a nuestra Aplicación! </p>
-            <label> Ingresa el código de validación enviado a tu correo: </label>
-            <input type="text" id="cod_validacion" required>
+             <a href="http://{{host}}/activate/{{key}}"><button type="button">Haz click aqui para completar tu registro</button></a>
 
             <div>
                 <h4>
-                    El código estará activo por 24hrs, luego tu cuenta será cancelada.
+                    El código estará activo por 24hrs, pasado este tiempo podrá generar otro código.
                 </h4>
             </div>
 
@@ -17,8 +16,6 @@
     {% endblock %}
 
     {% block button %}
-
-        <a href="{% url 'welcome' %}"><button> Activar </button></a>
 
     {% endblock %}
 
