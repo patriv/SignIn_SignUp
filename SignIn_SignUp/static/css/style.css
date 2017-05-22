@@ -1,25 +1,46 @@
-button {
+/*button {
     margin: 30px;
     position: relative;
     margin-left: 200px;
-    padding: 10px 20px;
+    margin-top: 10px;
+    padding: 5px 10px;
+}*/
+
+.jumbotron{
+    margin-top: 100px;
 }
 
-input {
-    display: block;
-    padding: 5px;
+.input-group {
+   
     width: 250px;
-    align-items: center;
-    margin: 5px;
-    position: relative;
-    margin-left: 20px;
+    margin: 0 auto;
+       
 }
 
 label {
-    margin: 5px;
+    margin: 0 auto;
 }
 
-#init{
-   margin-top: 120px;
+/*#init{
+
+   margin-top: 100px;
+   padding: 10px;
+   margin-bottom: 100px;
+   margin-right: 150px;
+   border: 1px solid transparent;
+   border-radius: 4px;
+   border-color: black;
+   align-items:  center;
+}
+*/
+#error_email, #error_username{
+    position: relative;
+    top : 30px;
+    padding: 15px;
+    margin-bottom: 100px;
+ 
 }
 
+
+
+    

@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+
+
+    if (id_email.style.border != "red") {
     $("#id_first_name").click(function() {
     $("#error_name").empty();
     $("#id_first_name").val("");
@@ -10,6 +13,8 @@ $(document).ready(function () {
     });
     $("#id_email").click(function() {
     $("#error_email").empty();
+    error_email.style.border = "transparent";
+    id_email.style.border = "inherit";
     $("#id_email").val("");
     });
     $("#id_username").click(function() {
@@ -24,4 +29,5 @@ $(document).ready(function () {
     $("#error_password2").empty();
     $("#id_password2").val("");
     });
+}
 });

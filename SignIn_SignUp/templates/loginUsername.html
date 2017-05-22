@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'js/validateLogin.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6">
+             <div class = "jumbotron" id="init" >
+
+               <label > Username </label>
+               <div class="input-group">   
+                
+                <input  class= "form-control" type="Username" name="Username" id = "id_username" placeholder="Sólo caracteres alfanumérico"/>
+               </div> 
+
+                <label calss = "text-center" for = "form-group "> Password </label>
+                <div class="input-group">
+                    <input  class= "form-control" type="Password" name="Password" id = "id_password"/>
+                    <span id = "show-hide-passwd" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span> 
+                </div>
+
+                <div id = "login" >
+                    
+                    <a href="#">¿Olvidó su contraseña?</a><br>
+                    <a href="{% url 'forgot_username' %}">¿Olvidó su username?</a>
+                    <span><button type="submit" name="button">Login</button></span>
+
+                </div>
+               
+                
+            </div>
+            <div  class = "error" id = "error_username"></div>
+            </div>
+            <div class="col-md-3">
+            </div>
+
+        </div>
+    </form>
+{% endblock %}
