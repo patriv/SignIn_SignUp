@@ -171,6 +171,9 @@ def user_login(request):
     
     if request.method == 'POST':
         form = LoginForm(request.POST)
+        print(request.POST)
+
+        print(form.is_valid())
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -182,7 +185,8 @@ def user_login(request):
                     if user:
                         login(request, user)
                         email_login_successfull(user)
-                        if user.is_staff or user.is_superuser:
+                        print(user.is_staff)
+                        if user.is_staff:
                             return HttpResponseRedirect(reverse_lazy('welcomeStaff'))
                         else:
                             return HttpResponseRedirect(reverse_lazy('welcome'))
@@ -219,7 +223,7 @@ def user_loginEmail(request):
     if request.method == 'POST':
         form = Login_EmailForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            username = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user_auth, choices = authenticate_user(username, password)
             if user_auth is not None:
@@ -230,7 +234,7 @@ def user_loginEmail(request):
                         login(request, user)
                         return HttpResponseRedirect(reverse_lazy('welcome'))
                     else:
-                        if (choices == 1) :
+                        if (choices == 1):
                             form.add_error(
                                 None, "Tu correo o contraseña no son correctos")
                         else :

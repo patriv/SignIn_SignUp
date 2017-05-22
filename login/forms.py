@@ -42,23 +42,47 @@ class RegisterForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(
         max_length=60, label=' Username o Email: ',
-        required=True, widget=forms.TextInput())
+        required=True, widget=forms.TextInput(attrs={
+            'class':"form-control",
+            'id': "id_username",
+            'placeholder' : ""
+        }))
     password = forms.CharField(
-        label="Contraseña: ", required=True, widget=forms.PasswordInput())
+        label="Contraseña: ", required=True, widget=forms.PasswordInput(attrs={
+            'class' : "form-control",
+            'type' :"Password",
+            'id' : "id_password"
+        }))
 
 class Login_EmailForm(forms.Form):
     email = forms.CharField(
         max_length=60, label='Email: ',
-        required=True, widget=forms.TextInput())
+        required=True, widget=forms.TextInput(attrs={
+            'class':"form-control",
+            'id': "id_email",
+            'placeholder' : "ej: nombre@ejemplo.com"
+        }))
     password = forms.CharField(
-        label="Contraseña: ", required=True, widget=forms.PasswordInput())
+        label="Contraseña: ", required=True, widget=forms.PasswordInput(attrs={
+            'class' : "form-control",
+            'type' :"Password",
+            'id' : "id_password"
+        }))
 
 class Login_UsernameForm(forms.Form):
-    email = forms.CharField(
+    username = forms.CharField(
         max_length=60, label='Username: ',
-        required=True, widget=forms.TextInput())
+        required=True, widget=forms.TextInput(attrs={
+            'class':"form-control",
+            'id': "id_username",
+            'placeholder' : "Sólo caracteres alfanumérico"
+        }))
     password = forms.CharField(
-        label="Contraseña: ", required=True, widget=forms.TextInput())
+        label="Contraseña: ", required=True, widget=forms.TextInput(attrs={
+            'class' : "form-control",
+            'type' :"Password",
+            'id' : "id_password"
+        }))
 
 
 class forgotUsernameForm(forms.Form):

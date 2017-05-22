@@ -49,7 +49,7 @@ urlpatterns = [
         Success.as_view(),
         name='success_register'),
     url(
-        r'^welcome',
+        r'^welcomeStaff',
         WelcomeStaff.as_view(),
         name='welcomeStaff'),
     url(

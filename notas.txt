@@ -18,3 +18,8 @@ REGISTRO DE USUSARIO COLOCAR PREGUNTA DE SEGURIDAD, PERO EN MI PRIMER LOGIN COLO
 USERATRIBUTTES COLOCAR PREGUNTAS DE SEGURIDAD
 
 BUSCAR PERMISOS PARA CONSTRUIR EL MENU
+
+
+<input  class= "form-control" name="Username" id = "id_username" placeholder=""/>
+
+<input  class= "form-control" type="Password" name="Password" id = "id_password"/>

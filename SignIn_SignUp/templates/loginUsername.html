@@ -32,14 +32,14 @@
 
                         <div class="input-group">
                             <label > Username </label>
-                            <input  class= "form-control" name="Username" id = "id_username" placeholder="Sólo caracteres alfanumérico"/>
+                            {{ form.username }}
                         </div>
 
                         <br>
                         <div class="input-group">
                             <label> Password </label>
                             <div class="input-group">
-                                <input  class= "form-control" type="Password" name="Password" id = "id_password"/>
+                                {{ form.password }}
                                 <a id = "show-hide-passwd" action="hide" class = "input-group-addon"> <i class = "glyphicon glyphicon-eye-open"></i></a>
                             </div>
                         </div>

@@ -34,7 +34,7 @@
 
                         <div class="input-group">
                             <label> Email </label>
-                            <input class = "form-control" type="Email" name="Email" id = "id_email" placeholder="ej: nombre@ejemplo.com">
+                            {{ form.email }}
                         </div>
 
                         <div class = "input-group">
@@ -42,20 +42,19 @@
                             <label> Password </label>
                         </div>
                         <div class="input-group">
-                            <div class="input-group"><input class= "form-control" type="Password" name="Password" id = "id_password">
+                            {{ form.password }}
                             <span id = "show-hide-passwd" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
-                        </div>
                         </div>
 
                         <div >
-
                             <br>
                             <a href="#">¿Olvidó su contraseña?</a><br>
                             <a href="{% url 'forgot_username' %}">¿Olvidó su username?</a>
                             <button id = "login" type="submit" name="button">Login</button>
-
-
                         </div>
+                        </div>
+
+
                     </div>
                 </div>
                 <div class="col-md-3"></div>
