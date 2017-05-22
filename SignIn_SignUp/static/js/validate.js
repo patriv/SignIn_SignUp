@@ -86,7 +86,6 @@ $(document).ready(function () {
     $("#id_password").change(function () {
        
        var password = $(this).val();
-       alert(password);
        var message1 = "La contraseña debe tener una longitud entre seis y diez caracteres, alfanumérica, con mínimo una letra " +
                       "mayúscula y contener alguno de estos caracteres especiales: $@!%_*?&.";
        var regexPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$@!%_*?&.]).{6,10}$/;

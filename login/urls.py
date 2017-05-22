@@ -12,6 +12,16 @@ urlpatterns = [
         user_login,
         name='login'),
     url(
+        r'^emailLogin',
+        user_loginEmail,
+        name='EmailLogin'),
+
+    url(
+        r'^usernameLogin',
+        user_loginUsername,
+        name='UsernameLogin'),
+
+    url(
         r'^logout',
         django.contrib.auth.views.logout,
         {
@@ -53,4 +63,6 @@ urlpatterns = [
         r'^forgotUsername/$',
         ForgotUsername.as_view(),
         name='forgot_username'),
+
+
 ]

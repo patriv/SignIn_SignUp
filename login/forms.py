@@ -35,7 +35,7 @@ class RegisterForm(forms.ModelForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Sólo se admiten letras'
         self.fields['password'].widget.attrs['placeholder'] = 'Sólo caracteres alfanuméricos'
         self.fields['password2'].widget.attrs['placeholder'] = 'Sólo caracteres alfanuméricos'
-        self.fields['username'].widget.attrs['placeholder'] = 'Sólo caracteres numéricos'
+        self.fields['username'].widget.attrs['placeholder'] = 'Sólo caracteres alfanuméricos'
         self.fields['email'].widget.attrs['placeholder'] = 'Ej: nombre@example.com'
 
 
@@ -46,6 +46,21 @@ class LoginForm(forms.Form):
         required=True, widget=forms.TextInput())
     password = forms.CharField(
         label="Contraseña: ", required=True, widget=forms.PasswordInput())
+
+class Login_EmailForm(forms.Form):
+    email = forms.CharField(
+        max_length=60, label='Email: ',
+        required=True, widget=forms.TextInput())
+    password = forms.CharField(
+        label="Contraseña: ", required=True, widget=forms.PasswordInput())
+
+class Login_UsernameForm(forms.Form):
+    email = forms.CharField(
+        max_length=60, label='Username: ',
+        required=True, widget=forms.TextInput())
+    password = forms.CharField(
+        label="Contraseña: ", required=True, widget=forms.TextInput())
+
 
 class forgotUsernameForm(forms.Form):
     email = forms.CharField(
