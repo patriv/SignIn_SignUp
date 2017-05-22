@@ -39,28 +39,31 @@ class RegisterForm(forms.ModelForm):
         self.fields['email'].widget.attrs['placeholder'] = 'Ej: nombre@example.com'
 
 
+class EmailForm(forms.Form):
+    email = forms.CharField(
+        max_length=60, label='Email: ',
+        required=True, widget=forms.TextInput(attrs={
+            'class': "form-control",
+            'id': "id_email",
+            'placeholder': "ej: nombre@ejemplo.com"
+        }))
+    password = forms.CharField(
+        label="Contraseña: ", required=True, widget=forms.TextInput(attrs={
+            'class' : "form-control",
+            'type' :"Password",
+            'id' : "id_password",
+
+        }))
+
+
+
 class LoginForm(forms.Form):
     username = forms.CharField(
         max_length=60, label=' Username o Email: ',
         required=True, widget=forms.TextInput(attrs={
             'class':"form-control",
             'id': "id_username",
-            'placeholder' : ""
-        }))
-    password = forms.CharField(
-        label="Contraseña: ", required=True, widget=forms.PasswordInput(attrs={
-            'class' : "form-control",
-            'type' :"Password",
-            'id' : "id_password"
-        }))
-
-class Login_EmailForm(forms.Form):
-    email = forms.CharField(
-        max_length=60, label='Email: ',
-        required=True, widget=forms.TextInput(attrs={
-            'class':"form-control",
-            'id': "id_email",
-            'placeholder' : "ej: nombre@ejemplo.com"
+            'placeholder': ""
         }))
     password = forms.CharField(
         label="Contraseña: ", required=True, widget=forms.PasswordInput(attrs={

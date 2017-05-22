@@ -11,9 +11,10 @@ urlpatterns = [
         r'^login',
         user_login,
         name='login'),
+
     url(
         r'^emailLogin',
-        user_loginEmail,
+        LoginEmail,
         name='EmailLogin'),
 
     url(

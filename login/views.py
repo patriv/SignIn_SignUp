@@ -216,45 +216,43 @@ def user_login(request):
     return render(request,'login.html', context)
 
 
-def user_loginEmail(request):
+def LoginEmail(request):
+    print("en la funcion")
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse_lazy('welcome'))
     
     if request.method == 'POST':
-        form = Login_EmailForm(request.POST)
+        form = EmailForm(request.POST)
+
         if form.is_valid():
             username = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user_auth, choices = authenticate_user(username, password)
-            if user_auth is not None:
-                if user_auth.is_active:
-                    user = authenticate(username=user_auth.username,
-                                        password=password)
-                    if user:
-                        login(request, user)
-                        return HttpResponseRedirect(reverse_lazy('welcome'))
+            if (choices == 1) :
+                if user_auth is not None:
+                    if user_auth.is_active:
+                        user = authenticate(username=user_auth.username,
+                                            password=password)
+
+                        if user:
+                            login(request, user)
+                            return HttpResponseRedirect(reverse_lazy('welcome'))
+                        else:
+                            form.add_error(
+                                    None, "Tu correo o contraseña no son correctos")
+
                     else:
-                        if (choices == 1):
-                            form.add_error(
-                                None, "Tu correo o contraseña no son correctos")
-                        else :
-                            form.add_error(
-                                None, "Tu username o contraseña no son correctos")
+                        form.add_error(None, "Aún no has confirmado tu correo.")
+                        user = None
                 else:
-                    form.add_error(None, "Aún no has confirmado tu correo.")
-                    user = None
+                    form.add_error(None, "Tu correo o contraseña no son correctos")
             else:
-                if (choices == 1) :
-                            form.add_error(
-                                None, "Tu correo o contraseña no son correctos")
-                else :
-                    form.add_error(
-                        None, "Tu username o contraseña no son correctos")
+                form.add_error(None, "Debe ingresar un correo válido")
         else:
             context = {'form': form}
             return render(request, 'loginEmail.html',context)
     else:
-        form = LoginForm()
+        form = EmailForm()
     context = {'form': form, 'host': request.get_host()}
     return render(request,'loginEmail.html', context)
 
@@ -269,35 +267,32 @@ def user_loginUsername(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user_auth, choices = authenticate_user(username, password)
-            if user_auth is not None:
-                if user_auth.is_active:
-                    user = authenticate(username=user_auth.username,
-                                        password=password)
-                    if user:
-                        login(request, user)
-                        return HttpResponseRedirect(reverse_lazy('welcome'))
-                    else:
-                        if (choices == 1) :
-                            form.add_error(
-                                None, "Tu correo o contraseña no son correctos")
-                        else :
+            if (choices == 2):
+                if user_auth is not None:
+                    if user_auth.is_active:
+                        user = authenticate(username=user_auth.username,
+                                            password=password)
+
+                        if user:
+                            login(request, user)
+                            return HttpResponseRedirect(reverse_lazy('welcome'))
+                        else:
                             form.add_error(
                                 None, "Tu username o contraseña no son correctos")
+
+                    else:
+                        form.add_error(None, "Aún no has confirmado tu correo.")
+                        user = None
                 else:
-                    form.add_error(None, "Aún no has confirmado tu correo.")
-                    user = None
+                    form.add_error(None, "Tu username o contraseña no son correctos")
             else:
-                if (choices == 1) :
-                            form.add_error(
-                                None, "Tu correo o contraseña no son correctos")
-                else :
-                    form.add_error(
-                        None, "Tu username o contraseña no son correctos")
+                form.add_error(None, "Debe ingresar un username válido")
+
         else:
             context = {'form': form}
             return render(request, 'loginUsername.html',context)
     else:
-        form = LoginForm()
+        form = Login_UsernameForm()
     context = {'form': form, 'host': request.get_host()}
     return render(request,'loginUsername.html', context)    
 
