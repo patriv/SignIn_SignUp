@@ -329,7 +329,7 @@ class Registro (FormView):
             user.username = post_values['username']
             password = post_values['password']
             user.set_password(password)
-            user.is_active = False;
+            user.is_active = False
             user.save()
 
             group = Group.objects.get(name="Clientes")
@@ -386,7 +386,36 @@ class ForgotUsername (FormView):
         if form.is_valid():
             # Guardamos los datos
 
-            return HttpResponseRedirect(reverse_lazy('home'))
+            user = form.save()
+            user.first_name = post_values['first_name']
+            user.last_name = post_values['last_name']
+            user.email = post_values['email']
+            user.username = post_values['username']
+            password = post_values['password']
+            user.set_password(password)
+            user.is_active = False
+            user.save()
+
+            group = Group.objects.get(name="Clientes")
+            user.groups.add(group)
+
+            activation_key = create_token()
+            key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
+            user_profile = UserProfile(user=user, activation_key=activation_key,
+                                       key_expires=key_expires)
+            user_profile.save()
+
+            c = {'usuario': user.get_full_name,
+                 'key': activation_key,
+                 'host': request.META['HTTP_HOST']}
+            from_email = 'Aplicacion Prueba'
+            email_subject = 'Aplicación Prueba - Activación de cuenta'
+            message = get_template('success.html').render(c)
+            msg = EmailMessage(email_subject, message, to=[user.email], from_email=from_email)
+            msg.content_subtype = 'html'
+            msg.send()
+
+            return render(request, 'success.html', c)
         else:
             return render(request,'forgotUsername.html',{'form': form})
 
