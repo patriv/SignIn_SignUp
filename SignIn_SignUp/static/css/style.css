@@ -1,8 +1,8 @@
 /*button {
     margin: 30px;
     position: relative;
-    margin-left: 200px;
-    margin-top: 10px;
+    margin-left: 250px;
+    margin-top: 5px;
     padding: 5px 10px;
 }*/
 
@@ -21,24 +21,29 @@ label {
     margin: 0 auto;
 }
 
-/*#init{
+#init{
 
    margin-top: 100px;
    padding: 10px;
    margin-bottom: 100px;
    margin-right: 150px;
-   border: 1px solid transparent;
-   border-radius: 4px;
-   border-color: black;
    align-items:  center;
 }
-*/
+
 #error_email, #error_username{
     position: relative;
-    top : 30px;
+    top : 250px;
+    width: 100%;
     padding: 15px;
     margin-bottom: 100px;
+    text-align: center;
+
  
+}
+
+#login{
+    position: relative;
+    left: 140px;
 }
 
 

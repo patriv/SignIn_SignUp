@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <form action="" method="POST">
+    <form  role = "form" action="" method="POST">
         {% csrf_token %}
 
         {% if form.errors %}
@@ -26,30 +26,47 @@
             {% endfor %}
         {% endif %}
 
-        <div class="row">
-            <div class="col-md-3">
-            </div>
-            <div class="col-md-6">
-             <div class = "input-group" id="init">
-               
-                <label class="col-lg-2 control-label"> Email </label>
-                <input class = "form-control" type="Email" name="Email" id = "id_email" placeholder="ej: nombre@ejemplo.com"></input>
-                <label> Password </label>
-                <input type="Password" name="Password" id = "id_password"></input>
+        <div class = "container">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class = "jumbotron">
 
-                <div id = "login" >
-                    
-                    <a href="#">¿Olvidó su contraseña?</a><br>
-                    <a href="{% url 'forgot_username' %}">¿Olvidó su username?</a>
-                    <button type="submit" name="button">Login</button>
+                        <div class="input-group">
+                            <label> Email </label>
+                            <input class = "form-control" type="Email" name="Email" id = "id_email" placeholder="ej: nombre@ejemplo.com">
+                        </div>
 
+                        <div class = "input-group">
+                            <br>
+                            <label> Password </label>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group"><input class= "form-control" type="Password" name="Password" id = "id_password">
+                            <span id = "show-hide-passwd" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
+                        </div>
+                        </div>
+
+                        <div >
+
+                            <br>
+                            <a href="#">¿Olvidó su contraseña?</a><br>
+                            <a href="{% url 'forgot_username' %}">¿Olvidó su username?</a>
+                            <button id = "login" type="submit" name="button">Login</button>
+
+
+                        </div>
+                    </div>
                 </div>
-               
-                
+                <div class="col-md-3"></div>
             </div>
-            <div  class = "error" id = "error_email"></div>
-            </div>
-            <div class="col-md-3">
+        </div>
+
+        <div class = "container-fluid">
+            <div class = "row">
+                <div class = "col-md-12">
+                    <div  class = "error" id = "error_email"></div>
+                </div>
             </div>
 
         </div>

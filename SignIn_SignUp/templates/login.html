@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'js/validateLogin.js' %}"></script>
+{% endblock %}
 
 {% block content %}
     <form action="" method="POST">
@@ -23,18 +28,31 @@
             <div class="col-md-3">
             </div>
             <div class="col-md-6">
-             <div id="init">
-                {% for field in form %}
-                    <label> {{ field.label }} </label>
-                    <div>{{ field }}</div>
-                {% endfor %}
+             <div class="jumbotron">
+
+
+                 <div class="input-group">
+                     <label> Username o Email </label>
+                     <input  class= "form-control" type="Username" name="Username" id = "id_username" placeholder=""/>
+                 </div>
+
+                 <div class="input-group">
+                     <br>
+                 <label for = "form-group "> Password </label>
+                 <div class="input-group">
+                     <input  class= "form-control" type="Password" name="Password" id = "id_password"/>
+                     <span id = "show-hide-passwd" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
+                 </div>
+                 </div>
+
+                 <div >
+                     <br>
+                     <a href="#">¿Olvidó su contraseña?</a><br>
+                     <a href="{% url 'forgot_username' %}">¿Olvidó su username?</a>
+                     <button id = "login" type="submit" name="button">Login</button>
+                  </div>
              </div>
 
-                <div id = "login" >
-                    <a href="#">¿Olvidó su contraseña?</a><br>
-                    <a href="{% url 'forgot_username' %}">¿Olvidó su username?</a>
-                </div>
-            <button type="submit" name="button">Login</button>
             </div>
             <div class="col-md-3">
             </div>
