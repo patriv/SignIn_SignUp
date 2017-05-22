@@ -13,6 +13,8 @@ from django.contrib.auth.models import User, Group
 from login.forms import *
 from login.models import *
 import datetime
+import hashlib
+import random
 
 
 def validate_username(request):
@@ -61,6 +63,16 @@ def groups():
                 grupo= Group.objects.create(name=group)
 
 
+def create_token():
+    chars = list('ABCDEFGHIJKLMNOPQRSTUVWYZabcdefghijklmnopqrstuvwyz0123456789')
+    random.shuffle(chars)
+    chars = ''.join(chars)
+    sha1 = hashlib.sha1(chars.encode('utf8'))
+    token = sha1.hexdigest()
+    key = token[:12]
+    return key
+
+
 def authenticate_user(username=None, password=None):
         """ Authenticate a user based on email address as the user name. """
         try:
@@ -78,15 +90,9 @@ def authenticate_user(username=None, password=None):
 
 def email_login_successfull(user):
     usuario = user.get_full_name()
-    last_login = user.last_login
-    date_hour = datetime.datetime.today()
-
-    formato = "%d-%m-%y %I:%m %p"
-    cadena = date_hour.strftime(formato) 
-    cadena = cadena.split(" ")
-    date = cadena[0]
-    time = cadena[1] + " " + cadena[2]
-
+    date = user.last_login.date
+    time = str(user.last_login.hour) + ":" + str(user.last_login.minute)
+    time += ":" + str(user.last_login.second)
 
     c = {'usuario': usuario,
          'fecha': date,
@@ -99,6 +105,30 @@ def email_login_successfull(user):
     msg.send()
 
 
+def new_Token(request, pk):
+    if request.user.is_authenticated():
+            HttpResponseRedirect(reverse_lazy('home'))
+
+    user = User.objects.get(pk=pk)
+    UserProfile.objects.filter(user=user).delete()
+    key = create_token()
+    key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
+    new_profile = UserProfile(user=user, activation_key=key,
+                              key_expires=key_expires)
+    new_profile.save()
+    c = {'usuario': user.get_full_name,
+         'key': key,
+         'host': request.META['HTTP_HOST']}
+    from_email = 'Aplicacion Prueba'
+    email_subject = 'Aplicación Prueba - Código Activación de cuenta'
+    message = get_template('success.html').render(c)
+    msg = EmailMessage(email_subject, message, to=[user.email], from_email=from_email)
+    msg.content_subtype = 'html'
+    msg.send()
+
+    return render(request, 'success.html', c)
+
+
 def register_confirm(request, activation_key):
     if request.user.is_authenticated():
         HttpResponseRedirect(reverse_lazy('home'))
@@ -109,13 +139,9 @@ def register_confirm(request, activation_key):
 
     time = datetime.datetime.today()
 
-    print(user_profile.key_expires)
-    print(time)
-
-    # if user_profile.key_expires < time:
-    #     print('esta mal :(')
-        # return HttpResponseRedirect(reverse_lazy('generate_key',
-        #     kwargs={'pk': user.pk}))
+    if user_profile.key_expires < time:
+        return HttpResponseRedirect(reverse_lazy('new_Token',
+             kwargs={'pk': user.pk}))
 
     if request.method == 'GET':
         user.is_active = True
@@ -138,7 +164,10 @@ class Active(TemplateView):
 
 def user_login(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse_lazy('welcome'))
+        if request.user.is_staff:
+            return HttpResponseRedirect(reverse_lazy('welcomeStaff'))
+        else:
+            return HttpResponseRedirect(reverse_lazy('welcome'))
     
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -153,7 +182,10 @@ def user_login(request):
                     if user:
                         login(request, user)
                         email_login_successfull(user)
-                        return HttpResponseRedirect(reverse_lazy('welcome'))
+                        if user.is_staff or user.is_superuser:
+                            return HttpResponseRedirect(reverse_lazy('welcomeStaff'))
+                        else:
+                            return HttpResponseRedirect(reverse_lazy('welcome'))
                     else:
                         if (choices == 1) :
                             form.add_error(
@@ -178,6 +210,7 @@ def user_login(request):
         form = LoginForm()
     context = {'form': form, 'host': request.get_host()}
     return render(request,'login.html', context)
+
 
 def user_loginEmail(request):
     if request.user.is_authenticated():
@@ -303,7 +336,7 @@ class Registro (FormView):
             group = Group.objects.get(name="Clientes")
             user.groups.add(group)
 
-            activation_key = "4PL1C4C10N" + str(user.id)
+            activation_key = create_token()
             key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
             user_profile = UserProfile(user=user, activation_key=activation_key,
                                       key_expires=key_expires)
@@ -333,7 +366,33 @@ class Welcome (LoginRequiredMixin, TemplateView):
     login_url = 'login'
     redirect_field_name = 'redirect_to'
 
+
+class WelcomeStaff(LoginRequiredMixin, TemplateView):
+    template_name = 'welcomeStaff.html'
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+
+
 class ForgotUsername (FormView):
+    template_name = 'forgotUsername.html'
+    form_class = forgotUsernameForm
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance with the passed
+        POST variables and then checked for validity.
+        """
+        post_values = request.POST.copy()
+        form = forgotUsernameForm(post_values)
+        if form.is_valid():
+            # Guardamos los datos
+
+            return HttpResponseRedirect(reverse_lazy('home'))
+        else:
+            return render(request,'forgotUsername.html',{'form': form})
+
+
+class ForgotPassword(FormView):
     template_name = 'forgotUsername.html'
     form_class = forgotUsernameForm
 

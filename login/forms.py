@@ -39,7 +39,6 @@ class RegisterForm(forms.ModelForm):
         self.fields['email'].widget.attrs['placeholder'] = 'Ej: nombre@example.com'
 
 
-
 class LoginForm(forms.Form):
     username = forms.CharField(
         max_length=60, label=' Username o Email: ',

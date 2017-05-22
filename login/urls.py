@@ -37,6 +37,10 @@ urlpatterns = [
         register_confirm,
         name='register_confirm'),
     url(
+        r'^newToken/(?P<pk>\d+)/$',
+        new_Token,
+        name='new_Token'),
+    url(
         r'^account-Active',
         Active.as_view(),
         name='account_active'),
@@ -44,6 +48,10 @@ urlpatterns = [
         r'^sucessRegister',
         Success.as_view(),
         name='success_register'),
+    url(
+        r'^welcome',
+        WelcomeStaff.as_view(),
+        name='welcomeStaff'),
     url(
         r'^welcome',
         Welcome.as_view(),
