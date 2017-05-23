@@ -40,7 +40,7 @@ $(document).ready(function () {
        }
         /*Sirve para limpiar la pantalla cuando hay un error*/
         $("#id_email").click(function() {
-          if (error == 1){
+          if (error === 1){
             $("#error_email").empty();
             error_email.style.border = "transparent";
             $("#id_email").val("");
