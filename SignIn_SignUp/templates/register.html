@@ -3,59 +3,73 @@
 {% load bootstrap3 %}
 
 {% block script %}
-<script type="text/javascript" src="{% static 'js/validate.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/cleanError.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/validateLogin.js' %}"></script>
+
 {% endblock %}
 
 {% block content %}
-    <form action="" method="POST" id='form_id' data-validate-username-url="{% url 'validate_username' %}"
+    <div class = "container">
+        <h2>Registro</h2>
+        <h3 id = "sub">Nombre de la Aplicación</h3>
+        <form action="" method="POST" id='form_id' data-validate-username-url="{% url 'validate_username' %}"
                     data-validate-email-url = "{% url 'validate_email' %}">
-        {% csrf_token %}
-        <div class="row">
-            <div class="col-md-3">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class = "form-group">
+                        <label for = "name">Nombre: </label>
+                        <span>{{form.first_name}}</span>
+                    </div>
+
+                     <div class = "form-group">
+                         <label>Apellido: </label>
+                         <span>{{form.last_name}}</span>
+                     </div>
+
+                     <div class="form-group">
+                        <label>Email: </label>
+                        <span>{{form.email}}</span>
+                     </div>
+
+                     <div class="form-group">
+                        <label>Username: </label>
+                        <span>{{form.username}}</span>
+                     </div>
+
+                     <div class="form-group">
+                        <label>Contraseña: </label>
+                         <div class="input-group" id = "passw">
+                            {{form.password}}
+                            <span id = "show-hide-passwd" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
+                         </div>
+                     </div>
+
+                     <div class="form-group">
+                        <label>Por favor, repita la contraseña: </label>
+                         <div class="input-group" id = "passw2">
+                            {{form.password2}}
+                            <span id = "show-hide-passwd2" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
+                         </div>
+                     </div>
+
+                    <button type="submit" name="button">Registrar</button>
+                </div>
             </div>
-            <div class="col-md-6">
-                <div>
+        </form >
+    </div>
 
-                     <div>
-                     <label>Nombre: </label>
-                     <span>{{form.first_name}}</span>
-                     <div id = "error_name"></div>
-                     </div>
+    <div class = "container-fluid">
+            <div class = "row">
+                <div class = "col-md-12" id = "errors">
+                    <div  class = "error" id = "error_name"></div>
+                    <div  class = "error" id = "error_lastname"></div>
+                    <div  class = "error" id = "error_email"></div>
+                    <div  class = "error" id = "error_username"></div>
+                    <div  class = "error" id = "error_password"></div>
+                    <div  class = "error" id = "error_password2"></div>
 
-                     <div>
-                     <label>Apellido: </label>
-                     <span>{{form.last_name}}</span>
-                     <div id = "error_lastname"></div>
-                     </div>
-
-                     <div>
-                     <label>Email: </label>
-                     <span>{{form.email}}</span>
-                     <div id = "error_email"></div>
-                     </div>
-
-                     <div>
-                     <label>Username: </label>
-                     <span>{{form.username}}</span>
-                     <div id = "error_username"></div>
-                     </div>
-
-                     <div>
-                     <label>Contraseña: </label>
-                     <span>{{form.password}}</span>
-                     <div id = "error_password"></div>
-                     </div>
-
-                     <label>Por favor, repita la contraseña: </label>
-                     <span>{{form.password2}}</span>
-                     <div id = "error_password2"></div>
-
-                    <button type="submit" name="button">Login</button>
+                </div>
             </div>
-            <div class="col-md-3">
-            </div>
-            </div>
-        </div>
-    </form >
+    </div>
 {% endblock %}

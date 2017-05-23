@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    var error = 0;
+
     $("#id_first_name").change(function () {
        
        var name = $(this).val();
@@ -8,6 +10,7 @@ $(document).ready(function () {
        var regexNum =  /^[0-9]+$/;
        if ( !(name.match(regexName))){
            error_name.innerHTML = message1;
+
        }
        else if (name.length == 0) {
            error_name.innerHTML = message1;
@@ -33,6 +36,7 @@ $(document).ready(function () {
 
        if ( !(email.match(regexEmail))){
            error_email.innerHTML = message1;
+           error = 1;
        }
        else {
            $.ajax({

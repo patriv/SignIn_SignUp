@@ -43,13 +43,11 @@ def validate_email(request):
 
 def forgot_email(request):
     email = request.POST.get('email', None)
-    print(email)
     data = {
         'email_exists': User.objects.filter(email=email).exists()
     }
 
     if data['email_exists'] == False:
-        print("en if")
         data['error'] = 'El email ingresado no existe, por favor intente nuevamente'
 
     return JsonResponse(data)
@@ -171,9 +169,6 @@ def user_login(request):
     
     if request.method == 'POST':
         form = LoginForm(request.POST)
-        print(request.POST)
-
-        print(form.is_valid())
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -185,7 +180,6 @@ def user_login(request):
                     if user:
                         login(request, user)
                         email_login_successfull(user)
-                        print(user.is_staff)
                         if user.is_staff:
                             return HttpResponseRedirect(reverse_lazy('welcomeStaff'))
                         else:
@@ -217,7 +211,6 @@ def user_login(request):
 
 
 def LoginEmail(request):
-    print("en la funcion")
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse_lazy('welcome'))
     
@@ -305,10 +298,6 @@ class Registro (FormView):
     template_name = 'register.html'
     form_class = RegisterForm
 
-    def get_context_data(self, **kwargs):
-        context = super(
-            Registro, self).get_context_data(**kwargs)
-        return context
 
 
     def post(self, request, *args, **kwargs):

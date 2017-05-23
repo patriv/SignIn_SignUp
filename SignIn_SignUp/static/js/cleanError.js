@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-
-
     if (id_email.style.border != "red") {
     $("#id_first_name").click(function() {
     $("#error_name").empty();

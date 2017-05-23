@@ -6,28 +6,32 @@
     padding: 5px 10px;
 }*/
 
-.jumbotron{
+h2{
+    text-align: center;
+    font-weight: bold;
+}
+#sub{
+    text-align: center;
+}
+.jumbotron, #init{
     margin-top: 100px;
 }
 
 .input-group {
-   
+
     width: 250px;
     margin: 0 auto;
-       
+
 }
+
+#passw, #passw2{
+    width: auto;
+    margin: 0 auto;
+}
+
 
 label {
     margin: 0 auto;
-}
-
-#init{
-
-   margin-top: 100px;
-   padding: 10px;
-   margin-bottom: 100px;
-   margin-right: 150px;
-   align-items:  center;
 }
 
 #error_email, #error_username{
@@ -37,8 +41,12 @@ label {
     padding: 15px;
     margin-bottom: 100px;
     text-align: center;
+}
 
- 
+#errors{
+    position: relative;
+    top: 150px;
+    padding: 15px;
 }
 
 #login{
