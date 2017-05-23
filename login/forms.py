@@ -75,10 +75,8 @@ class EmailForm(forms.Form):
         label="Contraseña: ", required=True, widget=forms.TextInput(attrs={
             'class' : "form-control",
             'type' :"Password",
-            'id' : "id_password",
-
+            'id' : "id_password"
         }))
-
 
 
 class LoginForm(forms.Form):
@@ -95,6 +93,7 @@ class LoginForm(forms.Form):
             'type' :"Password",
             'id' : "id_password"
         }))
+
 
 class Login_UsernameForm(forms.Form):
     username = forms.CharField(

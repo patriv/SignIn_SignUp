@@ -11,28 +11,25 @@ urlpatterns = [
         r'^login',
         user_login,
         name='login'),
-
     url(
         r'^emailLogin',
         LoginEmail,
         name='EmailLogin'),
-
     url(
         r'^usernameLogin',
         user_loginUsername,
         name='UsernameLogin'),
-
     url(
         r'^logout',
         django.contrib.auth.views.logout,
         {
-            'next_page': 'home'
+            'next_page': 'login'
         },
         name='logout'),
     url(
         r'^register',
-        Registro.as_view(),
-        name='registro'),
+        Register.as_view(),
+        name='register'),
     url(
         r'^activate/(?P<activation_key>\w+)/$',
         register_confirm,
