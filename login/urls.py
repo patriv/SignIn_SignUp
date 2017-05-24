@@ -43,6 +43,10 @@ urlpatterns = [
         Active.as_view(),
         name='account_active'),
     url(
+        r'^account-Block',
+        Block.as_view(),
+        name='account_block'),
+    url(
         r'^sucessRegister',
         Success.as_view(),
         name='success_register'),

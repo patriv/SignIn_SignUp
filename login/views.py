@@ -99,9 +99,12 @@ def send_email(subject, message_template, context, email):
 
 def email_login_successful(user):
     usuario = user.get_full_name()
-    date = user.last_login.date
-    time = str(user.last_login.hour) + ":" + str(user.last_login.minute)
-    time += ":" + str(user.last_login.second)
+    formato = "%d-%m-%y %I:%m:%S %p"
+    date_time = user.last_login.strftime(formato).split(" ")
+    date = date_time[0]
+    time = date_time[1] + " " + date_time[2]
+    print(date)
+    print(time)
 
     c = {'usuario': usuario,
          'fecha': date,
@@ -122,14 +125,17 @@ def new_Token(request, pk):
     key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
     new_profile = UserProfile(user=user, activation_key=key,
                               key_expires=key_expires)
+    try:
+        c = {'usuario': user.get_full_name,
+             'key': key,
+             'host': request.META['HTTP_HOST']}
+        subject = 'Aplicación Prueba - Código Activación de cuenta'
+        message_template = 'success.html'
+        email = user.email
+        send_email(subject, message_template, c, email)
+    except:
+        render(request, 'success.html', c)
     new_profile.save()
-    c = {'usuario': user.get_full_name,
-         'key': key,
-         'host': request.META['HTTP_HOST']}
-    subject = 'Aplicación Prueba - Código Activación de cuenta'
-    message_template = 'success.html'
-    email = user.email
-    send_email(subject, message_template, c, email)
     return render(request, 'success.html', c)
 
 
@@ -153,24 +159,28 @@ def register_confirm(request, activation_key):
     if request.method == 'GET':
         user.is_active = True
         user.save()
-        subject = 'Aplicación Prueba - Cuenta Activada'
-        message_template = 'account_active.html'
-        email = user.email
-        send_email(subject, message_template, c, email)
+        try:
+            subject = 'Aplicación Prueba - Cuenta Activada'
+            message_template = 'account_active.html'
+            email = user.email
+            send_email(subject, message_template, c, email)
+        except:
+            pass
 
     return render(request, 'account_active.html', c)
 
 
-def user_block(request, user):
-    user.is_active = False
-    user.save()
-    c = {'usuario': user.get_full_name,
-         'host': request.META['HTTP_HOST']}
-    subject = 'Aplicación Prueba - Cuenta Bloqueada'
-    message_template = 'account_block.html'
-    email = user.email
-    send_email(subject, message_template, c, email)
-    return 0
+def user_block(user):
+    try:
+        user.is_active = False
+        user.save()
+        c = {'usuario': user.get_full_name}
+        subject = 'Aplicación Prueba - Cuenta Bloqueada'
+        message_template = 'account_block.html'
+        email = user.email
+        send_email(subject, message_template, c, email)
+    except:
+        pass
 
 
 def user_login(request):
@@ -183,19 +193,24 @@ def user_login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user_auth, choices = authenticate_user(username)
-            msg_error = "Recuerde: Al realizar tres intentos erróneos su cuenta será bloqueada."
-            error_username = "Tu username  o contraseña no son correctos." + msg_error
-            error_email = "Tu correo o contraseña no son correctos." + msg_error
             if user_auth is not None:
                 users = User.objects.get(username=username)
                 user_profile = get_object_or_404(UserProfile, user=users)
                 print(user_profile.intent)
-                if user_auth.is_active and user_profile.intent < 4:
+                if user_auth.is_active and user_profile.intent < 3:
                     user = authenticate(username=user_auth.username,
                                         password=password)
+                    msg_error = "Recuerde: Al realizar tres intentos erróneos su cuenta será bloqueada."
+                    error_username = "Tu username  o contraseña no son correctos." + msg_error
+                    error_email = "Tu correo o contraseña no son correctos." + msg_error
                     if user:
                         login(request, user)
-                        email_login_successful(user)
+                        try:
+                            email_login_successful(user)
+                        except:
+                            pass
+                        user_profile.intent = 0
+                        user_profile.save()
                         if user.is_staff:
                             return HttpResponseRedirect(reverse_lazy('welcomeStaff'))
                         else:
@@ -205,17 +220,25 @@ def user_login(request):
                             form.add_error(None, error_email)
                         else:
                             form.add_error(None, error_username)
-                        user_profile.intent = user_profile.intent + 1
+
+                        today = datetime.datetime.today().date()
+
+                        if user_profile.date_intent != today:
+                            user_profile.intent = 1
+                            user_profile.date_intent = today
+                        else:
+                            user_profile.intent = user_profile.intent + 1
+
                         user_profile.save()
-                        user_block(users)
-                elif not user_auth.is_active:
+                elif user_profile.intent == 3:
+                    msg = "Su cuenta ha sido bloqueada. Comuniquese con el administrador" \
+                          " para iniciar el proceso de desbloqueo."
+                    form.add_error(None, msg)
+                    user_block(users)
+                else:
                     msg = "Aún no has confirmado tu cuenta. Por favor revise su correo."
                     form.add_error(None, msg)
                     user = None
-                else:
-                    msg = "Su cuenta ha sido bloqueada. Revise su correo para iniciar el " \
-                          "proceso de desbloqueo."
-                    form.add_error(None, msg)
             else:
                 if choices == 1:
                     form.add_error(None, error_email)
@@ -391,6 +414,10 @@ class WelcomeStaff(LoginRequiredMixin, TemplateView):
 
 class Active(TemplateView):
     template_name = 'account_active.html'
+
+
+class Block(TemplateView):
+    template_name = 'account_block.html'
 
 
 class ForgotUsername(FormView):

@@ -7,6 +7,7 @@ class UserProfile(models.Model):
     activation_key = models.CharField(max_length=40, blank=True)
     key_expires = models.DateTimeField()
     intent = models.IntegerField(default=0)
+    date_intent = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username
