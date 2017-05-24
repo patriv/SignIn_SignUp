@@ -48,7 +48,7 @@ def forgot_email(request):
         'email_exists': User.objects.filter(email=email).exists()
     }
 
-    if data['email_exists'] == False:
+    if not data['email_exists']:
         print("en if")
         data['error'] = 'El email ingresado no existe, por favor intente nuevamente'
 
@@ -61,6 +61,13 @@ def groups():
     for group in nombres_grupo:
         if Group.objects.filter(name=group).count() == 0:
             Group.objects.create(name=group)
+
+
+def get_user(user):
+    if user.is_staff:
+        return HttpResponseRedirect(reverse_lazy('welcomeStaff'))
+    else:
+        return HttpResponseRedirect(reverse_lazy('welcome'))
 
 
 def create_token():
@@ -103,8 +110,6 @@ def email_login_successful(user):
     date_time = user.last_login.strftime(formato).split(" ")
     date = date_time[0]
     time = date_time[1] + " " + date_time[2]
-    print(date)
-    print(time)
 
     c = {'usuario': usuario,
          'fecha': date,
@@ -193,16 +198,15 @@ def user_login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user_auth, choices = authenticate_user(username)
+            msg_error = " Recuerde: Al realizar tres intentos erróneos su cuenta será bloqueada."
+            error_username = "Tu username  o contraseña no son correctos." + msg_error
+            error_email = "Tu correo o contraseña no son correctos." + msg_error
             if user_auth is not None:
                 users = User.objects.get(username=username)
                 user_profile = get_object_or_404(UserProfile, user=users)
-                print(user_profile.intent)
                 if user_auth.is_active and user_profile.intent < 3:
                     user = authenticate(username=user_auth.username,
                                         password=password)
-                    msg_error = "Recuerde: Al realizar tres intentos erróneos su cuenta será bloqueada."
-                    error_username = "Tu username  o contraseña no son correctos." + msg_error
-                    error_email = "Tu correo o contraseña no son correctos." + msg_error
                     if user:
                         login(request, user)
                         try:
@@ -211,10 +215,7 @@ def user_login(request):
                             pass
                         user_profile.intent = 0
                         user_profile.save()
-                        if user.is_staff:
-                            return HttpResponseRedirect(reverse_lazy('welcomeStaff'))
-                        else:
-                            return HttpResponseRedirect(reverse_lazy('welcome'))
+                        get_user(users)
                     else:
                         if choices == 1:
                             form.add_error(None, error_email)
@@ -272,7 +273,7 @@ def LoginEmail(request):
 
                         if user:
                             login(request, user)
-                            return HttpResponseRedirect(reverse_lazy('welcome'))
+                            get_user(user)
                         else:
                             form.add_error(
                                 None, "Tu correo o contraseña no son correctos")
@@ -311,7 +312,7 @@ def user_loginUsername(request):
 
                         if user:
                             login(request, user)
-                            return HttpResponseRedirect(reverse_lazy('welcome'))
+                            get_user(user)
                         else:
                             form.add_error(
                                 None, "Tu username o contraseña no son correctos")
