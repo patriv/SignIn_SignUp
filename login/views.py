@@ -65,9 +65,9 @@ def groups():
 
 def get_user(user):
     if user.is_staff:
-        return HttpResponseRedirect(reverse_lazy('welcomeStaff'))
+        return 'welcomeStaff'
     else:
-        return HttpResponseRedirect(reverse_lazy('welcome'))
+        return 'welcome'
 
 
 def create_token():
@@ -102,6 +102,7 @@ def send_email(subject, message_template, context, email):
     msg = EmailMessage(email_subject, message, to=[email], from_email=from_email)
     msg.content_subtype = 'html'
     msg.send()
+    print("Se envió exitosamente el correo.")
 
 
 def email_login_successful(user):
@@ -180,10 +181,11 @@ def user_block(user):
         user.is_active = False
         user.save()
         c = {'usuario': user.get_full_name}
-        subject = 'Aplicación Prueba - Cuenta Bloqueada'
+        subject = 'Aplicación Prueba -  '
         message_template = 'account_block.html'
         email = user.email
         send_email(subject, message_template, c, email)
+        print("termino de enviar")
     except:
         pass
 
@@ -215,7 +217,8 @@ def user_login(request):
                             pass
                         user_profile.intent = 0
                         user_profile.save()
-                        get_user(users)
+                        template = get_user(users)
+                        return HttpResponseRedirect(reverse_lazy(template))
                     else:
                         if choices == 1:
                             form.add_error(None, error_email)
@@ -234,6 +237,7 @@ def user_login(request):
                 elif user_profile.intent == 3:
                     msg = "Su cuenta ha sido bloqueada. Comuniquese con el administrador" \
                           " para iniciar el proceso de desbloqueo."
+                    print(msg)
                     form.add_error(None, msg)
                     user_block(users)
                 else:

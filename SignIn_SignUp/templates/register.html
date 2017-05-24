@@ -3,8 +3,8 @@
 {% load bootstrap3 %}
 
 {% block script %}
-<script type="text/javascript" src="{% static 'js/validateLogin.js' %}"></script>
-
+    <script type="text/javascript" src="{% static 'js/validateLogin.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/effect_errors.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -14,6 +14,7 @@
         <form action="" method="POST" id='form_id' data-validate-username-url="{% url 'validate_username' %}"
                     data-validate-email-url = "{% url 'validate_email' %}">
             {% csrf_token %}
+
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
@@ -41,7 +42,9 @@
                         <label>Contraseña: </label>
                          <div class="input-group" id = "passw">
                             {{form.password}}
-                            <span id = "show-hide-passwd" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
+                            <span id = "show-hide-passwd" action="hide"
+                                  class = "input-group-addon glyphicon glyphicon-eye-open">
+                            </span>
                          </div>
                      </div>
 
@@ -49,27 +52,40 @@
                         <label>Por favor, repita la contraseña: </label>
                          <div class="input-group" id = "passw2">
                             {{form.password2}}
-                            <span id = "show-hide-passwd2" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
+                            <span id = "show-hide-passwd2" action="hide"
+                                  class = "input-group-addon glyphicon glyphicon-eye-open">
+                            </span>
                          </div>
                      </div>
-
                     <button type="submit" name="button">Registrar</button>
                 </div>
             </div>
         </form >
     </div>
 
-
     <div class = "container-fluid">
             <div class = "row">
                 <div class = "col-md-12" id = "errors">
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                     <div  class = "error" id = "error_name"></div>
                     <div  class = "error" id = "error_lastname"></div>
                     <div  class = "error" id = "error_email"></div>
                     <div  class = "error" id = "error_username"></div>
                     <div  class = "error" id = "error_password"></div>
                     <div  class = "error" id = "error_password2"></div>
-
                 </div>
             </div>
     </div>
