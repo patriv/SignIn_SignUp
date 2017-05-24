@@ -36,19 +36,20 @@ label {
     margin: 0 auto;
 }
 
-#error_email, #error_username{
+/*#error_email, #error_username{
     position: relative;
     top : 250px;
     width: 100%;
     padding: 15px;
     margin-bottom: 100px;
     text-align: center;
-}
+}*/
 
 #errors{
     position: relative;
     top: 10px;
     padding: 15px;
+    visibility: hidden;
 }
 
 #login{

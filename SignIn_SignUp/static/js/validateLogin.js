@@ -1,4 +1,26 @@
 var error = 0;
+
+function styleError(id, NameError, message1) {
+    NameError.innerHTML = message1;
+    NameError.style.visibility = "visible";
+    id.style.border = "2px solid red";
+    error= 1;
+}
+
+function clearScreen(id, NameError){
+    if (error === 1){
+        $("#error_email").empty();
+        error_email.style.border = "transparent";
+        $("#id_email").val("");
+        id_email.style.border = "2px solid #ccc";
+        $("#error_email").fadeToggle(0);
+        error_email.style.visibility="hidden";
+        error = 0;
+          }
+
+}
+
+
 $(document).ready(function () {
 
  if (error == 1){
@@ -6,19 +28,35 @@ $(document).ready(function () {
  } 
 
  $("#id_email").change(function () {
-       var email = $(this).val();
-       var message1 = "Introduzca un correo electrónico válido";
-       var regexEmail =  /^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
-       var form = $(this).closest("form");
+     var email = $(this).val();
+     var message1 = "Introduzca un correo electrónico válido";
+     var regexEmail =  /^[a-zA-Z0-9\._-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,4}$/;
+     var form = $(this).closest("form");
 
        if ( !(email.match(regexEmail))){
-           error_email.style.color = "red";
-           error_email.style.border = "1px solid #ccc";
-           error_email.innerText = message1;
-           id_email.style.border = "2px solid red";
-           error = 1;
+           alert(id_email);
+           styleError(id_email, error_email, message1);
+           $("#error_email").fadeToggle(4000);
+
        }
        else{
+           alert("ajax");
+           $.ajax({
+               url: form.attr("data-validate-email-url"),
+               data: {
+                   email: email
+               },
+               type: 'POST',
+               dataType: 'json',
+               success: function (data) {
+                   if (data.email_exists) {
+                       styleError(id_email, error_email, data.error);
+                       $("#error_email").fadeToggle(4000);
+
+                   }
+               }
+           });
+
            $.ajax({
                url: form.attr("data-forgot-email-url"),
                data: {
@@ -27,12 +65,13 @@ $(document).ready(function () {
                type: 'POST',
                dataType: 'json',
                success: function (data) {
+                   alert("en success");
                    emailExist = data.email_exists;
+                   alert(emailExist);
                    if ((emailExist) == false) {
-                       error_email.innerHTML = data.error;
-                       error_email.style.color = "red";
-                       error_email.style.border = "1px solid #ccc";
-                       error = 1;
+                       styleError(id_email, error_email, data.error);
+                       $("#error_email").fadeToggle(4000);
+
                    }
                }
            })
@@ -45,6 +84,8 @@ $(document).ready(function () {
             error_email.style.border = "transparent";
             $("#id_email").val("");
             id_email.style.border = "2px solid #ccc";
+            $("#error_email").fadeToggle(0);
+            error_email.style.visibility="hidden";
             error = 0;
           }
         });
@@ -55,18 +96,33 @@ $(document).ready(function () {
        var username = $(this).val();
        var message1 = "Introduzca un username válido";
        var regexEmail =  /^[a-zA-Z0-9\._-]{2,}$/;
+       var form = $(this).closest("form");
 
 
        if ( !(username.match(regexEmail))){
-           error_username.style.color = "red";
-           error_username.style.border = "1px solid #ccc";
-           error_username.innerText = message1;
-           id_username.style.border = "2px solid red";
-           error = 1;
-       }    
+           styleError(id_username, error_username, message1);
+           $("#error_username").fadeToggle(4000);
+
+       }
+       else{
+           alert("else");
+           $.ajax({
+               url: form.attr("data-validate-username-url"),
+               data: {username:username
+               },
+               type:'POST',
+               dataType: 'json',
+               success: function(data){
+                   if (data.username_exists) {
+                       styleError(id_username, error_username, data.error);
+                       $("#error_username").fadeToggle(4000);
+                   }
+               }
+           });
+       }
 
         $("#id_username").click(function() {
-          if (error == 1){
+          if (error === 1){
             $("#error_username").empty();
             error_username.style.border = "transparent";
             id_username.style.border = "2px solid #ccc";
@@ -82,11 +138,13 @@ $(document).ready(function () {
       var regexName =  /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ]*$/;
       var regexNum =  /^[0-9]+$/;
       if ( !(name.match(regexName))){
+          alert("aqui");
           error_name.style.color = "red";
           error_name.style.border = "1px solid #ccc";
           error_name.innerHTML = message1;
           id_first_name.style.border = "2px solid red";
-          error = 1;
+
+          error= 1;
       }
 
       $("#id_first_name").click(function() {
@@ -112,7 +170,7 @@ $(document).ready(function () {
           error= 1;
       }
       $("#id_last_name").click(function() {
-          if(error == 1) {
+          if(error === 1) {
               $("#error_lastname").empty();
               error_lastname.style.border = "transparent";
               $("#id_last_name").val("");
