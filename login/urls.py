@@ -62,21 +62,20 @@ urlpatterns = [
         r'^ajax/validate_username/$',
         validate_username,
         name='validate_username'),
-
     url(
         r'^ajax/validate_email/$',
         validate_email,
         name='validate_email'),
-
     url(
         r'^ajax/forgot_email/$',
         forgot_email,
         name='ajax_forgot_email'),
-
     url(
-        r'^forgotUsername/$',
-        ForgotUsername.as_view(),
-        name='forgot_username'),
-
-
+        r'^forgotPassword/$',
+        ForgotPassword.as_view(),
+        name='forgot_password'),
+     url(
+         r'^passRestore/(?P<token>\w+)/(?P<id>\w+)/$',
+         pass_restore,
+        name='pass_restore'),
 ]

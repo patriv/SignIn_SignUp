@@ -13,6 +13,7 @@ from django.contrib.auth.models import User, Group
 from login.forms import *
 from login.models import *
 import datetime
+import time
 import hashlib
 import random
 
@@ -43,13 +44,11 @@ def validate_email(request):
 
 def forgot_email(request):
     email = request.POST.get('email', None)
-    print(email)
     data = {
         'email_exists': User.objects.filter(email=email).exists()
     }
 
     if not data['email_exists']:
-        print("en if")
         data['error'] = 'El email ingresado no existe, por favor intente nuevamente'
 
     return JsonResponse(data)
@@ -76,7 +75,7 @@ def create_token():
     chars = ''.join(chars)
     sha1 = hashlib.sha1(chars.encode('utf8'))
     token = sha1.hexdigest()
-    key = token[:12]
+    key = token[:15]
     return key
 
 
@@ -128,6 +127,8 @@ def new_Token(request, pk):
     user = User.objects.get(pk=pk)
     UserProfile.objects.filter(user=user).delete()
     key = create_token()
+    while UserProfile.objects.filter(activation_key=key).count() > 0:
+        key = create_token()
     key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
     new_profile = UserProfile(user=user, activation_key=key,
                               key_expires=key_expires)
@@ -176,16 +177,47 @@ def register_confirm(request, activation_key):
     return render(request, 'account_active.html', c)
 
 
+def pass_restore(request, token, id):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse_lazy('logout'))
+
+    user_profile = get_object_or_404(UserProfile, activation_key=token, user=id)
+    user = user_profile.user
+
+    time = datetime.datetime.today()
+
+    if user_profile.key_expires < time:
+        form = forgotUser_PassForm()
+        msg = "Su link caducó. Por favor solicite de nuevo el cambio de contraseña."
+        form.add_error(None, msg)
+        return render(request, 'forgotUser_Pass.html', {'form': form})
+
+    c = {'usuario': user.get_full_name,
+         'host': request.META['HTTP_HOST']}
+
+    if request.method == 'GET':
+        user.is_active = True
+        user.save()
+        try:
+            subject = 'Aplicación Prueba - Cuenta Activada'
+            message_template = 'account_active.html'
+            email = user.email
+            send_email(subject, message_template, c, email)
+        except:
+            pass
+
+    return render(request, 'account_active.html', c)
+
+
 def user_block(user):
     try:
         user.is_active = False
         user.save()
         c = {'usuario': user.get_full_name}
-        subject = 'Aplicación Prueba -  '
+        subject = 'Aplicación Prueba - Cuenta Desactivada '
         message_template = 'account_block.html'
         email = user.email
         send_email(subject, message_template, c, email)
-        print("termino de enviar")
     except:
         pass
 
@@ -346,11 +378,6 @@ class Register(FormView):
     template_name = 'register.html'
     form_class = RegisterForm
 
-    def get_context_data(self, **kwargs):
-        context = super(
-            Register, self).get_context_data(**kwargs)
-        return context
-
     def post(self, request, *args, **kwargs):
         """
         Handles POST requests, instantiating a form instance with the passed
@@ -377,6 +404,8 @@ class Register(FormView):
 
             try:
                 activation_key = create_token()
+                while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
+                    activation_key = create_token()
                 c = {'usuario': user.get_full_name,
                      'key': activation_key,
                      'host': request.META['HTTP_HOST']}
@@ -426,8 +455,8 @@ class Block(TemplateView):
 
 
 class ForgotUsername(FormView):
-    template_name = 'forgotUsername.html'
-    form_class = forgotUsernameForm
+    template_name = 'forgotUser_Pass.html'
+    form_class = forgotUser_PassForm
 
     def post(self, request, *args, **kwargs):
         """
@@ -435,18 +464,18 @@ class ForgotUsername(FormView):
         POST variables and then checked for validity.
         """
         post_values = request.POST.copy()
-        form = forgotUsernameForm(post_values)
+        form = forgotUser_PassForm(post_values)
         if form.is_valid():
             # Guardamos los datos
 
             return render(request, 'success.html')
         else:
-            return render(request, 'forgotUsername.html', {'form': form})
+            return render(request, 'forgotUser_Pass.html', {'form': form})
 
 
 class ForgotPassword(FormView):
-    template_name = 'forgotUsername.html'
-    form_class = forgotUsernameForm
+    template_name = 'forgotUser_Pass.html'
+    form_class = forgotUser_PassForm
 
     def post(self, request, *args, **kwargs):
         """
@@ -454,10 +483,49 @@ class ForgotPassword(FormView):
         POST variables and then checked for validity.
         """
         post_values = request.POST.copy()
-        form = forgotUsernameForm(post_values)
+        print(request.POST)
+        form = forgotUser_PassForm(post_values)
         if form.is_valid():
-            # Guardamos los datos
+            email = post_values['email']
+            try:
+                user = User.objects.get(email=email)
+                if user.is_active:
+                    try:
+                        activation_key = create_token()
+                        while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
+                            activation_key = create_token()
 
-            return HttpResponseRedirect(reverse_lazy('home'))
+                        c = {'usuario': user.get_full_name,
+                             'id': user.id,
+                             'key': activation_key,
+                             'host': request.META['HTTP_HOST']}
+                        subject = 'Aplicación Prueba - Solicitud de cambio de contraseña'
+                        message_template = 'pass_restore_email.html'
+                        send_email(subject, message_template, c, email)
+                    except:
+                        form.add_error(
+                            None, "Hubo un error en la conexión intente de nuevo. Gracias")
+                        context = {'form': form, 'host': request.get_host()}
+                        return render(request, 'forgotUser_Pass.html', context)
+                else:
+                    msg = "Aún no has confirmado tu cuenta. Por favor revise su correo."
+                    form.add_error(None, msg)
+                    return render(request, 'login.html', {'form': form})
+            except User.DoesNotExist:
+                time.sleep(3)
+                form = forgotUser_PassForm()
+                return render(request, 'forgotUser_Pass.html', {'form': form})
+
+            user_profile = UserProfile.objects.get(user=user)
+            key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
+            user_profile.key_expires = key_expires
+            user_profile.activation_key = activation_key
+            user_profile.save()
+
+            form.add_error(None,"Ha solicitado cambiar su contraseña. Revise su correo.")
+            context = {'form': form,
+                       'usuario': user.get_full_name(),
+                       'host': request.META['HTTP_HOST']}
+            return render(request, 'restoreSuccess.html', context)
         else:
-            return render(request, 'forgotUsername.html', {'form': form})
+            pass

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+    {% block content %}
+        <div>
+            <p> Hola <b>{{usuario}}</b> </p>
+            <p> Ha solicitado restablecer su contraseña. Este link sólo estará activo por 24 horas.</p>
+            <br>
+             <a href="http://{{host}}/pass_restore/{{key}}/{{id}}">
+                 <button type="button">Haz click aquí para cambiar su contraseña</button>
+             </a>
+
+            <div>
+                <h5> Si usted no solicitó restablecer su contraseña haga caso omiso a este correo.
+                    Gracias.</h5>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block button %}
+    {% endblock %}

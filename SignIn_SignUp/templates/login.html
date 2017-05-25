@@ -11,37 +11,32 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-md-3">
-            </div>
+            <div class="col-md-3"></div>
             <div class="col-md-6">
-             <div class="jumbotron">
+                <div class="jumbotron">
+                    <div class="input-group">
+                        <label> Username o Email </label>
+                        {{ form.username }}
+                     </div>
 
-
-                 <div class="input-group">
-                     <label> Username o Email </label>
-                     {{ form.username }}
-                 </div>
-
-                 <div class="input-group">
+                    <div class="input-group">
                      <br>
-                 <label for = "form-group "> Password </label>
-                 <div class="input-group">
-                     {{ form.password }}
-                     <span id = "show-hide-passwd" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
-                 </div>
-                 </div>
+                    <label for = "form-group "> Password </label>
+                        <div class="input-group">
+                            {{ form.password }}
+                            <span id = "show-hide-passwd" action="hide" class = "input-group-addon glyphicon glyphicon-eye-open"></span>
+                        </div>
+                    </div>
 
-                 <div >
-                     <br>
-                     <a href="#">¿Olvidó su contraseña?</a><br>
-                     <a href="{% url 'forgot_username' %}">¿Olvidó su username?</a>
-                     <button id = "login" type="submit" name="button">Login</button>
-                  </div>
-             </div>
-
+                     <div>
+                         <br>
+                         <a href="{% url 'forgot_password' %}">¿Olvidó su contraseña?</a><br>
+                         <a href="#">¿Olvidó su username?</a>
+                         <button id = "login" type="submit" name="button">Login</button>
+                     </div>
+                </div>
             </div>
-            <div class="col-md-3">
-            </div>
+            <div class="col-md-3"></div>
         </div>
     </form>
 
@@ -51,13 +46,13 @@
                     {% if form.errors %}
                         {% for field in form %}
                             {% for error in field.errors %}
-                                <div class="alert alert-danger">
+                                <div class="alert alert-danger" style="visibility: visible">
                                     <strong>{{ error|escape }}</strong>
                                 </div>
                             {% endfor %}
                         {% endfor %}
                         {% for error in form.non_field_errors %}
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger" style="visibility: visible">
                                 <strong>{{ error|escape }}</strong>
                             </div>
                         {% endfor %}

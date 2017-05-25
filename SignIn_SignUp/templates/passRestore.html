@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'js/validateRestore.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="POST" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="jumbotron">
+                    <div class="form-group">
+                        <label>Contraseña: </label>
+                         <div class="input-group" id = "passw">
+                            {{form.password}}
+                            <span id = "show-hide-passwd" action="hide"
+                                  class = "input-group-addon glyphicon glyphicon-eye-open">
+                            </span>
+                         </div>
+                     </div>
+
+                    <div class="form-group">
+                        <label>Por favor, repita la contraseña: </label>
+                         <div class="input-group" id = "passw2">
+                            {{form.password2}}
+                            <span id = "show-hide-passwd2" action="hide"
+                                  class = "input-group-addon glyphicon glyphicon-eye-open">
+                            </span>
+                         </div>
+                    </div>
+
+                    <div>
+                         <br>
+                         <button id = "login" type="submit" name="button">Restablecer Contraseña</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </form>
+
+     <div class = "container-fluid">
+            <div class = "row">
+                <div class = "col-md-12" id = "errors">
+                </div>
+            </div>
+     </div>
+
+{% endblock %}

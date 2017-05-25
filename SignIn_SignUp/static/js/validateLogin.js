@@ -34,13 +34,10 @@ $(document).ready(function () {
      var form = $(this).closest("form");
 
        if ( !(email.match(regexEmail))){
-           alert(id_email);
            styleError(id_email, error_email, message1);
            $("#error_email").fadeToggle(4000);
-
        }
        else{
-           alert("ajax");
            $.ajax({
                url: form.attr("data-validate-email-url"),
                data: {
@@ -65,10 +62,8 @@ $(document).ready(function () {
                type: 'POST',
                dataType: 'json',
                success: function (data) {
-                   alert("en success");
-                   emailExist = data.email_exists;
-                   alert(emailExist);
-                   if ((emailExist) == false) {
+                   var emailExist = data.email_exists;
+                   if ((emailExist) === false) {
                        styleError(id_email, error_email, data.error);
                        $("#error_email").fadeToggle(4000);
 
@@ -105,7 +100,6 @@ $(document).ready(function () {
 
        }
        else{
-           alert("else");
            $.ajax({
                url: form.attr("data-validate-username-url"),
                data: {username:username
@@ -134,16 +128,14 @@ $(document).ready(function () {
 
   $("#id_first_name").change(function () {
       var name = $(this).val();
-      var message1 = "El nombre debe contener sólo caracteres válidos sin espacio";
-      var regexName =  /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ]*$/;
+      var message1 = "El nombre debe contener sólo caracteres alfabéticos";
+      var regexName =  /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s ]*$/;
       var regexNum =  /^[0-9]+$/;
       if ( !(name.match(regexName))){
-          alert("aqui");
           error_name.style.color = "red";
           error_name.style.border = "1px solid #ccc";
           error_name.innerHTML = message1;
           id_first_name.style.border = "2px solid red";
-
           error= 1;
       }
 
@@ -160,7 +152,7 @@ $(document).ready(function () {
 
   $("#id_last_name").change(function () {
       var lastname = $(this).val();
-      var message1 = "El Apellido debe contener sólo caracteres válidos sin espacio";
+      var message1 = "El Apellido debe contener sólo caracteres alfabéticos";
       var regexLastname =  /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ]*$/;
       if ( !(lastname.match(regexLastname))){
           error_lastname.style.color = "red";

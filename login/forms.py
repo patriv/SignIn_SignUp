@@ -63,7 +63,9 @@ class RegisterForm(forms.ModelForm):
         model = User
         fields = ['first_name','last_name','email', 'username', 'password']
 
+
 class EmailForm(forms.Form):
+
     email = forms.CharField(
         max_length=60, label='Email: ',
         required=True, widget=forms.TextInput(attrs={
@@ -71,15 +73,18 @@ class EmailForm(forms.Form):
             'id': "id_email",
             'placeholder': "ej: nombre@ejemplo.com"
         }))
+
     password = forms.CharField(
         label="Contraseña: ", required=True, widget=forms.TextInput(attrs={
             'class' : "form-control",
             'type' :"Password",
             'id' : "id_password"
-        }))
+        })
+    )
 
 
 class LoginForm(forms.Form):
+
     username = forms.CharField(
         max_length=60, label=' Username o Email: ',
         required=True, widget=forms.TextInput(attrs={
@@ -87,37 +92,43 @@ class LoginForm(forms.Form):
             'id': "id_username",
             'placeholder': ""
         }))
+
     password = forms.CharField(
         label="Contraseña: ", required=True, widget=forms.PasswordInput(attrs={
             'class' : "form-control",
             'type' :"Password",
             'id' : "id_password"
-        }))
+        })
+    )
 
 
 class Login_UsernameForm(forms.Form):
+
     username = forms.CharField(
         max_length=60, label='Username: ',
         required=True, widget=forms.TextInput(attrs={
             'class':"form-control",
             'id': "id_username",
             'placeholder' : "Sólo caracteres alfanumérico"
-        }))
+        })
+    )
+
     password = forms.CharField(
         label="Contraseña: ", required=True, widget=forms.TextInput(attrs={
             'class': "form-control",
             'type': "Password",
             'id': "id_password"
-        }))
+        })
+    )
 
 
-class forgotUsernameForm(forms.Form):
+class forgotUser_PassForm(forms.Form):
+
     email = forms.CharField(
         label='Email: ',
         required=True,
-        widget=forms.EmailInput(attrs={
+        widget=forms.TextInput(attrs={
             'class': "form-control",
-            'type': "email",
             'id': "id_email"
         })
     )

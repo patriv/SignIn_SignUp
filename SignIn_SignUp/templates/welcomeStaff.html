@@ -3,15 +3,12 @@
     {% block content %}
         <div>
             <h2> Bienvenido {{user.get_full_name|default:user.username}}! </h2>
-
             <p> Felicitaciones! Es un usuario Cabeza Cuadrada </p>
         </div>
     {% endblock %}
 
     {% block button %}
-
         <a href="{% url 'logout' %}"><button> Logout </button></a>
-
     {% endblock %}
 
 
